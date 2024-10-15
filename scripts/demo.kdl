@@ -1,0 +1,32 @@
+// demo.kdl
+
+layout {
+    pane split_direction="horizontal" {
+        // Anvil server pane, taking 25% of the screen
+        pane size="25%" name="Anvil" command="bash" {
+            args "-c" "cp .env.example .env && cp contracts/.env.example contracts/.env && npm run demo:build && npm run start:anvil"
+        }
+        // The remaining 75% is split vertically for Operator and Tasks
+        pane size="75%" split_direction="vertical" {
+            // Operator pane, which waits for the Anvil server to be ready
+            // by checking if port 8545 is open, before proceeding
+            pane name="Operator" start_suspended=false command="bash" {
+                args "-c" r#"
+                   while ! nc -z localhost 8545; do \
+                       sleep 1; \
+                   done; \
+                   npm run demo:deploy && \
+                   npm run start:operator
+                "#
+            }
+            pane name="Tasks" start_suspended=false command="bash" {
+                args "-c" r#"
+                   while [ ! -f ./contracts/deployments/hello-world/31337.json ]; do \
+                       sleep 1; \
+                   done; \
+                    npm run start:traffic
+                "#
+            }
+        }
+    }
+}
