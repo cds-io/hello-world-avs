@@ -11,7 +11,10 @@
     "deploy:core-debug": "cd contracts && forge script script/DeployEigenLayerCore.s.sol --rpc-url http://localhost:8545 --broadcast --revert-strings debug",
     "deploy:hello-world-debug": "cd contracts && forge script script/HelloWorldDeployer.s.sol --rpc-url http://localhost:8545 --broadcast --revert-strings debug",
     "build": "cd contracts && forge build",
-    "extract:abis": "node utils/abis.js"
+    "extract:abis": "node utils/abis.js",
+    "demo:build": "./scripts/demo-build.sh",
+    "demo:deploy": "./scripts/demo-deploy.sh",
+    "zellij:demo": "zellij --layout scripts/demo.kdl"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
